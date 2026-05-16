@@ -49,7 +49,7 @@ export default class DroneSystem {
     // AUTO SHOOT
     if (!this.droneCanShoot) return;
 
-    const zombies = this.scene.zombies.getChildren();
+    const zombies = this.scene.enemyPool.group.getChildren();
 
     let nearest = null;
 

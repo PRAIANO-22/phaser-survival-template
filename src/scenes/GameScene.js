@@ -1,19 +1,25 @@
 import Phaser from "phaser";
 
-import WeaponSystem from "../systems/WeaponSystem.js";
-import DroneSystem from "../systems/DroneSystem.js";
-import SkillSystem from "../systems/SkillSystem.js";
-import EnemySystem from "../systems/EnemySystem.js";
-import HUD from "../ui/HUD.js";
-import UpgradeMenu from "../ui/UpgradeMenu.js";
-import WaveSystem from "../systems/WaveSystem.js";
-import CollisionSystem from "../systems/CollisionSystem.js";
-import XPSystem from "../systems/XPSystem.js";
-import HealthSystem from "../systems/HealthSystem.js";
-import InputSystem from "../systems/InputSystem.js";
-import PlayerSystem from "../systems/PlayerSystem.js";
-import GameConfig from "../config/GameConfig.js";
+import WeaponSystem from "../combat/WeaponSystem.js";
+import CollisionSystem from "../combat/CollisionSystem.js";
 
+import DroneSystem from "../systems/DroneSystem.js";
+
+import WaveSystem from "../waves/WaveSystem.js";
+import EnemySystem from "../waves/EnemySystem.js";
+
+import SkillSystem from "../upgrades/SkillSystem.js";
+import XPSystem from "../upgrades/XPSystem.js";
+import UpgradeMenu from "../upgrades/UpgradeMenu.js";
+
+import HealthSystem from "../core/HealthSystem.js";
+import InputSystem from "../core/InputSystem.js";
+import PlayerSystem from "../core/PlayerSystem.js";
+
+import HUD from "../ui/HUD.js";
+
+import GameConfig from "../config/GameConfig.js";
+import EnemyPool from "../pooling/EnemyPool.js";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -56,10 +62,11 @@ export default class GameScene extends Phaser.Scene {
     this.playerSpeed = GameConfig.PLAYER.SPEED;
     this.multiShot = GameConfig.WEAPON.MULTI_SHOT;
     this.bulletScale = GameConfig.WEAPON.BULLET_SCALE;
-    
-       
+
     this.isDead = false;
     // ================= SYSTEMS =================
+    
+    this.enemyPool = new EnemyPool(this);
     this.enemySystem = new EnemySystem(this);
     this.droneSystem = new DroneSystem(this);
     this.skillSystem = new SkillSystem(this);
@@ -68,33 +75,31 @@ export default class GameScene extends Phaser.Scene {
     this.xpSystem = new XPSystem(this);
     this.healthSystem = new HealthSystem(this);
     this.inputSystem = new InputSystem(this);
-    this.playerSystem = new PlayerSystem(this);    
+    this.playerSystem = new PlayerSystem(this);
+
     // ================= WORLD =================
     this.physics.world.setBounds(0, 0, 2400, 2400);
     this.add.grid(1200, 1200, 2400, 2400, 40, 40, 0xffffff, 0, 0xffffff, 0.05);
     // ================= PLAYER =================
     this.player = this.physics.add.sprite(1200, 1200, "player-tex");
     this.player.setCollideWorldBounds(true);
+    
     // ================= GROUPS =================
     this.bullets = this.physics.add.group({
       classType: Phaser.Physics.Arcade.Image,
       maxSize: 200,
       runChildUpdate: false,
     });
-    this.zombies = this.physics.add.group({
-      classType: Phaser.Physics.Arcade.Sprite,
-      maxSize: GameConfig.ZOMBIES.MAX_ZOMBIES,
-      runChildUpdate: false,
-    });
+
     this.xpOrbs = this.physics.add.group({
       classType: Phaser.Physics.Arcade.Image,
       maxSize: 300,
       runChildUpdate: false,
     });
-    this.waveSystem = new WaveSystem(this);
-    this.waveSystem.start();
+     this.waveSystem = new WaveSystem(this);
+     this.waveSystem.start();
     this.collisionSystem.setup();
-     // ================= WEAPON =================
+    // ================= WEAPON =================
     this.weapon = new WeaponSystem(this);
     this.inputSystem.create();
     // ================= HUD =================
@@ -104,17 +109,18 @@ export default class GameScene extends Phaser.Scene {
     this.hud.updateHealthBar();
     // ================= CAMERA =================
     this.cameras.main.startFollow(this.player);
+    console.log("GAME SCENE RODANDO");
   }
-    // ================= UPDATE =================
+  // ================= UPDATE =================
   update(time, delta) {
     if (this.isDead) {
       this.player.setVelocity(0);
       return;
     }
-      this.inputSystem.update();
-      this.playerSystem.update(); 
+    this.inputSystem.update();
+    this.playerSystem.update();
     // SYSTEMS
-    this.collisionSystem.update(delta);
+    
     this.droneSystem.update(delta);
     this.enemySystem.update(delta);
   }

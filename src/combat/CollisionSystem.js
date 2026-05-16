@@ -3,7 +3,7 @@ import GameConfig from "../config/GameConfig.js";
 export default class CollisionSystem {
   constructor(scene) {
     this.scene = scene;
-    this.collisionTimer = 0;
+    
   }
 
   // ================= SETUP =================
@@ -13,7 +13,7 @@ export default class CollisionSystem {
 
     this.scene.physics.add.overlap(
       this.scene.bullets,
-      this.scene.zombies,
+      this.scene.enemyPool.group,
       (bullet, zombie) => {
         if (!bullet.active || !zombie.active) {
           return;
@@ -48,7 +48,6 @@ export default class CollisionSystem {
 
             orb.value = zombie.xpValue;
           }
-          
 
           zombie.setActive(false);
 
@@ -81,7 +80,7 @@ export default class CollisionSystem {
 
     this.scene.physics.add.overlap(
       this.scene.player,
-      this.scene.zombies,
+      this.scene.enemyPool.group,
       () => {
         if (this.scene.isDead) return;
 
@@ -91,15 +90,5 @@ export default class CollisionSystem {
     
   }
 
-  update(delta) {
-
-    this.collisionTimer += delta;
-
-    if (this.collisionTimer < 40) {
-      return;
-    }
-
-    this.collisionTimer = 0;
-
-  }
+  
 }

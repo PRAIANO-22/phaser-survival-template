@@ -18,7 +18,7 @@ export default class PlayerSystem {
 
     const speed = this.scene.playerSpeed;
 
-    if (!this.scene.skillSystem.isDashing) {
+    if (!this.scene.skillSystem || !this.scene.skillSystem.isDashing) {
       this.scene.player.setVelocity(0);
 
       if (this.scene.inputSystem.keys.left.isDown) {

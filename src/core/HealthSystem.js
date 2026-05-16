@@ -64,7 +64,7 @@ export default class HealthSystem {
 
     this.scene.bullets.clear(true, true);
 
-    this.scene.zombies.getChildren().forEach((zombie) => {
+    this.scene.enemyPool.group.getChildren().forEach((zombie) => {
       zombie.setVelocity(0);
 
       zombie.body.enable = false;

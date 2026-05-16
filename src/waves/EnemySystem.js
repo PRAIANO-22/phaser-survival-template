@@ -14,7 +14,8 @@ export default class EnemySystem {
     if (this.scene.isDead) return;
 
     if (
-      this.scene.zombies.countActive(true) >= GameConfig.ZOMBIES.MAX_ZOMBIES
+      this.scene.enemyPool.group.countActive(true) >=
+      GameConfig.ZOMBIES.MAX_ZOMBIES
     ) {
       return;
     }
@@ -72,7 +73,7 @@ export default class EnemySystem {
 
     // ELITE
     if (roll <= 8) {
-      zombie = this.scene.zombies.get(x, y, "elite-zombie-tex");
+      zombie = this.scene.enemyPool.group.get(x, y, "elite-zombie-tex");
       if (!zombie) return;
 
       zombie.setActive(true);
@@ -94,7 +95,7 @@ export default class EnemySystem {
 
     // FAST
     else if (roll <= 35) {
-      zombie = this.scene.zombies.get(x, y, "zombie-tex");
+      zombie = this.scene.enemyPool.group.get(x, y, "zombie-tex");
       if (!zombie) return;
 
       zombie.setActive(true);
@@ -118,7 +119,7 @@ export default class EnemySystem {
 
     // TANK
     else if (roll <= 55) {
-      zombie = this.scene.zombies.get(x, y, "zombie-tex");
+      zombie = this.scene.enemyPool.group.get(x, y, "zombie-tex");
       if (!zombie) return;
 
       zombie.setActive(true);
@@ -142,7 +143,7 @@ export default class EnemySystem {
 
     // NORMAL
     else {
-      zombie = this.scene.zombies.get(x, y, "zombie-tex");
+      zombie = this.scene.enemyPool.group.get(x, y, "zombie-tex");
       if (!zombie) return;
 
       zombie.setActive(true);
@@ -173,7 +174,7 @@ export default class EnemySystem {
 
     this.zombieUpdateTimer = 0;
 
-    const zombies = this.scene.zombies.getChildren();
+    const zombies = this.scene.enemyPool.group.getChildren();
 
     for (let i = 0; i < zombies.length; i++) {
       const zombie = zombies[i];
@@ -186,21 +187,14 @@ export default class EnemySystem {
 
       const distSq = dx * dx + dy * dy;
 
-      if (distSq > GameConfig.ZOMBIES.DESPAWN_DISTANCE * GameConfig.ZOMBIES.DESPAWN_DISTANCE)
-      if (
+     if (
   distSq >
   GameConfig.ZOMBIES.ACTIVE_DISTANCE *
   GameConfig.ZOMBIES.ACTIVE_DISTANCE
 ) {
-
   zombie.setVelocity(0);
-
   continue;
-}{
-        zombie.setVelocity(0);
-
-        continue;
-      }
+}
 
       const dist = Math.sqrt(distSq);
 

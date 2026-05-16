@@ -1,5 +1,6 @@
 import Phaser from "phaser"
 import GameConfig from "../config/GameConfig.js";
+import ObjectPool from "../pooling/ObjectPool.js";
 
 export default class WeaponSystem {
 
@@ -75,13 +76,7 @@ export default class WeaponSystem {
     let bullet = this.scene.bullets.get(player.x, player.y, "bullet-tex");
     if (!bullet) return;
 
-    bullet.setActive(true);
-
-    bullet.setVisible(true);
-
-    bullet.body.enable = true;
-
-    bullet.setPosition(player.x, player.y);
+    ObjectPool.activate(bullet, player.x, player.y);
 
     if(!bullet) return
 
@@ -130,14 +125,9 @@ export default class WeaponSystem {
       this.bulletLifetime,
       ()=>{
 
-        if(bullet.active){
-          bullet.setActive(true);
-
-          bullet.setVisible(true);
-
-          bullet.body.enable = true;
+        if (bullet.active) {
+         ObjectPool.deactivate(bullet);
         }
-
       }
     )
 
@@ -164,13 +154,10 @@ export default class WeaponSystem {
           this.shotgunSpread
         )
 
-      const bullet = this.scene.bullets.create(
-        player.x,
-        player.y,
-        "bullet-tex"
-      )
+      const bullet = this.scene.bullets.get(player.x, player.y, "bullet-tex");
 
-      if(!bullet) continue
+      if (!bullet) continue
+      ObjectPool.activate(bullet, player.x, player.y);
 
       const angle = baseAngle + spread
 
@@ -191,8 +178,8 @@ export default class WeaponSystem {
         this.bulletLifetime,
         ()=>{
 
-          if(bullet.active){
-            bullet.destroy()
+          if (bullet.active) {
+            ObjectPool.deactivate(bullet);
           }
 
         }

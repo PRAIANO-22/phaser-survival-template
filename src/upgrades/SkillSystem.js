@@ -100,7 +100,7 @@ export default class SkillSystem {
 
         this.scene.cameras.main.shake(200, 0.008);
 
-        const zombies = this.scene.zombies.getChildren();
+        const zombies = this.scene.enemyPool.group.getChildren();
 
         for (let i = 0; i < zombies.length; i++) {
           const zombie = zombies[i];
