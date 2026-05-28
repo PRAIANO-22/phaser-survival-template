@@ -3,55 +3,144 @@ import Phaser from "phaser";
 export default class UpgradeMenu {
   constructor(scene) {
     this.scene = scene;
+
+    this.elements = [];
   }
 
   open(upgrades) {
-    this.scene.physics.pause();
+    this.scene.isMenuOpen = true;
+    // PARA PLAYER
+    this.scene.player.setVelocity(0);
 
-    this.container = this.scene.add
-      .container(
-        this.scene.cameras.main.midPoint.x,
-        this.scene.cameras.main.midPoint.y,
-      )
-      .setScrollFactor(0);
+    // PARA TODOS ZUMBIS
+    const zombies = this.scene.enemyPool.group.getChildren();
 
-    const bg = this.scene.add.rectangle(0, 0, 500, 350, 0x000000, 0.95);
+    for (let i = 0; i < zombies.length; i++) {
+      const zombie = zombies[i];
 
-    this.container.add(bg);
+      if (!zombie.active) continue;
 
-    const title = this.scene.add
-      .text(0, -120, "ESCOLHA UM UPGRADE", {
+      zombie.setVelocity(0);
+    }
+
+    // PAUSA SPAWN
+    if (this.scene.spawnEvent) {
+      this.scene.spawnEvent.paused = true;
+    }
+
+    // PAUSA WAVES
+    if (this.scene.waveSystem.waveEvent) {
+      this.scene.waveSystem.waveEvent.paused = true;
+    }
+
+    // BACKGROUND
+    const bg = this.scene.add.rectangle(
+      this.scene.scale.width / 2,
+      this.scene.scale.height / 2,
+      500,
+      350,
+      0x000000,
+      0.95,
+    );
+
+    bg.setScrollFactor(0);
+    bg.setDepth(9999);
+
+    this.elements.push(bg);
+
+    // TITULO
+    const title = this.scene.add.text(
+      this.scene.scale.width / 2,
+      this.scene.scale.height / 2 - 120,
+      "ESCOLHA UM UPGRADE",
+      {
         fontSize: "28px",
         color: "#ffffff",
-      })
-      .setOrigin(0.5);
+      },
+    );
 
-    this.container.add(title);
+    title.setOrigin(0.5);
+    title.setScrollFactor(0);
+    title.setDepth(10000);
 
+    this.elements.push(title);
+
+    // BOTÕES
     upgrades.forEach((upgrade, index) => {
-      const btn = this.scene.add
-        .text(0, -20 + index * 70, upgrade.name, {
+      const y = this.scene.scale.height / 2 - 20 + index * 70;
+
+      // BOTÃO
+      const btnBg = this.scene.add.rectangle(
+        this.scene.scale.width / 2,
+        y,
+        260,
+        50,
+        0x222222,
+      );
+
+      btnBg.setScrollFactor(0);
+      btnBg.setDepth(10000);
+
+      btnBg.setInteractive({ useHandCursor: true });
+
+      // TEXTO
+      const btnText = this.scene.add.text(
+        this.scene.scale.width / 2,
+        y,
+        upgrade.name,
+        {
           fontSize: "24px",
-          backgroundColor: "#222222",
-          padding: {
-            x: 20,
-            y: 10,
-          },
-        })
-        .setOrigin(0.5)
-        .setInteractive();
+          color: "#ffffff",
+        },
+      );
 
-      btn.on("pointerdown", () => {
-        upgrade.effect();
+      btnText.setOrigin(0.5);
+      btnText.setScrollFactor(0);
+      btnText.setDepth(10001);
 
-        this.container.destroy();
-
-        if (!this.scene.isDead) {
-          this.scene.physics.resume();
-        }
+      // HOVER
+      btnBg.on("pointerover", () => {
+        btnBg.setFillStyle(0x444444);
       });
 
-      this.container.add(btn);
+      btnBg.on("pointerout", () => {
+        btnBg.setFillStyle(0x222222);
+      });
+
+      // CLICK
+      btnBg.on("pointerdown", () => {
+        console.log("BOTAO CLICADO");
+        console.log(upgrade.name);
+
+        upgrade.effect();
+
+        console.log("EFEITO EXECUTADO");
+
+        this.close();
+      });
+
+      this.elements.push(btnBg);
+      this.elements.push(btnText);
     });
+  }
+
+  close() {
+    this.scene.isMenuOpen = false;
+
+    // VOLTA SPAWN
+    if (this.scene.spawnEvent) {
+      this.scene.spawnEvent.paused = false;
+    }
+
+    // VOLTA WAVES
+    if (this.scene.waveSystem.waveEvent) {
+      this.scene.waveSystem.waveEvent.paused = false;
+    }
+
+    this.elements.forEach((element) => {
+      element.destroy();
+    });
+
+    this.elements = [];
   }
 }

@@ -15,11 +15,13 @@ import UpgradeMenu from "../upgrades/UpgradeMenu.js";
 import HealthSystem from "../core/HealthSystem.js";
 import InputSystem from "../core/InputSystem.js";
 import PlayerSystem from "../core/PlayerSystem.js";
+import TweenManager from "../core/TweenManager.js";
 
 import HUD from "../ui/HUD.js";
 
 import GameConfig from "../config/GameConfig.js";
 import EnemyPool from "../pooling/EnemyPool.js";
+import XPOrbPool from "../pooling/XPOrbPool.js";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -59,13 +61,19 @@ export default class GameScene extends Phaser.Scene {
   }
   create() {
     // ================= PLAYER =================
+    this.isMenuOpen = false;
     this.playerSpeed = GameConfig.PLAYER.SPEED;
     this.multiShot = GameConfig.WEAPON.MULTI_SHOT;
     this.bulletScale = GameConfig.WEAPON.BULLET_SCALE;
 
     this.isDead = false;
+    this.isMenuOpen = false;
+
+    // ================= TWEEN MANAGER =================
+    this.tweenManager = new TweenManager(this);
+
     // ================= SYSTEMS =================
-    
+
     this.enemyPool = new EnemyPool(this);
     this.enemySystem = new EnemySystem(this);
     this.droneSystem = new DroneSystem(this);
@@ -83,7 +91,7 @@ export default class GameScene extends Phaser.Scene {
     // ================= PLAYER =================
     this.player = this.physics.add.sprite(1200, 1200, "player-tex");
     this.player.setCollideWorldBounds(true);
-    
+
     // ================= GROUPS =================
     this.bullets = this.physics.add.group({
       classType: Phaser.Physics.Arcade.Image,
@@ -91,13 +99,9 @@ export default class GameScene extends Phaser.Scene {
       runChildUpdate: false,
     });
 
-    this.xpOrbs = this.physics.add.group({
-      classType: Phaser.Physics.Arcade.Image,
-      maxSize: 300,
-      runChildUpdate: false,
-    });
-     this.waveSystem = new WaveSystem(this);
-     this.waveSystem.start();
+    this.xpOrbPool = new XPOrbPool(this);
+    this.waveSystem = new WaveSystem(this);
+    this.waveSystem.start();
     this.collisionSystem.setup();
     // ================= WEAPON =================
     this.weapon = new WeaponSystem(this);
@@ -113,15 +117,33 @@ export default class GameScene extends Phaser.Scene {
   }
   // ================= UPDATE =================
   update(time, delta) {
+    // GAME OVER
     if (this.isDead) {
       this.player.setVelocity(0);
       return;
     }
+
+    // MENU ABERTO
+    if (this.isMenuOpen) {
+      this.player.setVelocity(0);
+
+      return;
+    }
+
+    // GAMEPLAY
     this.inputSystem.update();
+
     this.playerSystem.update();
-    // SYSTEMS
-    
+
     this.droneSystem.update(delta);
+
     this.enemySystem.update(delta);
+  }
+
+  // Limpar tweens quando cena termina
+  shutdown() {
+    if (this.tweenManager) {
+      this.tweenManager.destroy();
+    }
   }
 }

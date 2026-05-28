@@ -60,7 +60,7 @@ export default class HealthSystem {
 
     this.scene.tweens.killAll();
 
-    this.scene.input.enabled = false;
+    //this.scene.input.enabled = false;
 
     this.scene.bullets.clear(true, true);
 
@@ -77,8 +77,8 @@ export default class HealthSystem {
     this.scene.time.delayedCall(100, () => {
       this.scene.add
         .rectangle(
-          this.scene.cameras.main.midPoint.x,
-          this.scene.cameras.main.midPoint.y,
+          this.scene.cameras.main.centerX,
+          this.scene.cameras.main.centerY,
           900,
           600,
           0x000000,

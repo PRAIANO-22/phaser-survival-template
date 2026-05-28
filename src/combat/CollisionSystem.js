@@ -3,7 +3,6 @@ import GameConfig from "../config/GameConfig.js";
 export default class CollisionSystem {
   constructor(scene) {
     this.scene = scene;
-    
   }
 
   // ================= SETUP =================
@@ -19,14 +18,6 @@ export default class CollisionSystem {
           return;
         }
 
-        bullet.setActive(false);
-
-        bullet.setVisible(false);
-
-        bullet.body.enable = false;
-
-        zombie.health -= bullet.damage;
-
         zombie.setTint(0xffffff);
 
         this.scene.time.delayedCall(50, () => {
@@ -35,27 +26,80 @@ export default class CollisionSystem {
           }
         });
 
-        if (zombie.health <= 0) {
-          const orb = this.scene.xpOrbs.get(zombie.x, zombie.y, "xp-tex");
-          if (orb) {
-            orb.setActive(true);
+        bullet.setActive(false);
 
-            orb.setVisible(true);
+        bullet.setVisible(false);
 
-            orb.body.enable = true;
+        bullet.body.enable = false;
 
-            orb.setPosition(zombie.x, zombie.y);
+        zombie.health -= bullet.damage;
+        const damageText = this.scene.add.text(
+          zombie.x,
+          zombie.y - 20,
+          bullet.damage,
+          {
+            fontSize: "22px",
+            fontStyle: "bold",
+            color: "#ffffff",
+            stroke: "#000000",
+            strokeThickness: 4,
+          },
+        );
 
-            orb.value = zombie.xpValue;
+        this.scene.tweens.add({
+          targets: damageText,
+          scale: 1.3,
+          y: zombie.y - 60,
+          alpha: 0,
+          duration: 250,
+          onComplete: () => {
+            damageText.destroy();
+          },
+        });
+
+        zombie.setTint(0xff0000);
+        zombie.setScale(1.1);
+
+        this.scene.time.delayedCall(50, () => {
+          if (zombie.active) {
+            zombie.clearTint();
+            zombie.setScale(1);
           }
+        });
 
-          zombie.setActive(false);
+        if (zombie.health <= 0) {
+          this.scene.cameras.main.shake(40, 0.002);
+          const orb = this.scene.xpOrbPool.get(zombie.x, zombie.y, "xp-tex");
+          if (orb) {
+            this.scene.xpOrbPool.activate(
+              orb,
+              zombie.x,
+              zombie.y,
+              zombie.xpValue,
+            );
+          }
+          this.scene.tweens.add({
+            targets: zombie,
+            scaleX: 1.4,
+            scaleY: 1.4,
+            alpha: 0,
+            duration: 120,
+            onComplete: () => {
+              zombie.setActive(false);
 
-          zombie.setVisible(false);
+              zombie.setVisible(false);
 
-          zombie.body.enable = false;
+              zombie.body.enable = false;
 
-          zombie.setVelocity(0);
+              zombie.setVelocity(0);
+
+              zombie.setScale(1);
+
+              zombie.setAlpha(1);
+            },
+          });
+
+          return;
         }
       },
     );
@@ -64,15 +108,10 @@ export default class CollisionSystem {
 
     this.scene.physics.add.overlap(
       this.scene.player,
-      this.scene.xpOrbs,
+      this.scene.xpOrbPool.group,
       (player, orb) => {
         this.scene.xpSystem.addXP(orb.value);
-
-        orb.setActive(false);
-
-        orb.setVisible(false);
-
-        orb.body.enable = false;
+        this.scene.xpOrbPool.deactivate(orb);
       },
     );
 
@@ -87,8 +126,5 @@ export default class CollisionSystem {
         this.scene.healthSystem.takeDamage(10);
       },
     );
-    
   }
-
-  
 }

@@ -33,6 +33,8 @@ export default class DroneSystem {
   // ================= UPDATE =================
 
   update(delta) {
+    if (this.scene.isMenuOpen) return;
+    
     if (!this.hasDrone) return;
 
     if (!this.drone) return;

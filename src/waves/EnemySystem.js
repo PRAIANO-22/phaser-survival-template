@@ -84,9 +84,11 @@ export default class EnemySystem {
 
       zombie.setPosition(x, y);
 
-      zombie.health = 5;
+      zombie.health = GameConfig.ZOMBIES.ELITE_HEALTH;
 
-      zombie.speed = this.scene.waveSystem.zombieSpeed + 30;
+      zombie.speed =
+        this.scene.waveSystem.zombieSpeed +
+        GameConfig.ZOMBIES.ELITE_SPEED_BONUS;
 
       zombie.xpValue = 5;
 
@@ -106,9 +108,10 @@ export default class EnemySystem {
 
       zombie.setPosition(x, y);
 
-      zombie.health = 1;
+      zombie.health = GameConfig.ZOMBIES.FAST_HEALTH;
 
-      zombie.speed = this.scene.waveSystem.zombieSpeed + 90;
+      zombie.speed =
+        this.scene.waveSystem.zombieSpeed + GameConfig.ZOMBIES.FAST_SPEED_BONUS;
 
       zombie.xpValue = 2;
 
@@ -130,9 +133,11 @@ export default class EnemySystem {
 
       zombie.setPosition(x, y);
 
-      zombie.health = 10;
+      zombie.health = GameConfig.ZOMBIES.TANK_HEALTH;
 
-      zombie.speed = this.scene.waveSystem.zombieSpeed - 40;
+      zombie.speed =
+        this.scene.waveSystem.zombieSpeed -
+        GameConfig.ZOMBIES.TANK_SPEED_PENALTY;
 
       zombie.xpValue = 6;
 
@@ -154,7 +159,7 @@ export default class EnemySystem {
 
       zombie.setPosition(x, y);
 
-      zombie.health = 2;
+      zombie.health = GameConfig.ZOMBIES.NORMAL_HEALTH;
 
       zombie.speed = this.scene.waveSystem.zombieSpeed;
 
@@ -187,14 +192,13 @@ export default class EnemySystem {
 
       const distSq = dx * dx + dy * dy;
 
-     if (
-  distSq >
-  GameConfig.ZOMBIES.ACTIVE_DISTANCE *
-  GameConfig.ZOMBIES.ACTIVE_DISTANCE
-) {
-  zombie.setVelocity(0);
-  continue;
-}
+      if (
+        distSq >
+        GameConfig.ZOMBIES.ACTIVE_DISTANCE * GameConfig.ZOMBIES.ACTIVE_DISTANCE
+      ) {
+        zombie.setVelocity(0);
+        continue;
+      }
 
       const dist = Math.sqrt(distSq);
 

@@ -15,6 +15,9 @@ export default class SkillSystem {
   // ================= DASH =================
 
   dash() {
+
+    if (this.scene.isMenuOpen) return;
+
     if (!this.canDash) return;
 
     this.canDash = false;
@@ -55,6 +58,9 @@ export default class SkillSystem {
   // ================= GRENADE =================
 
   throwGrenade() {
+    
+    if (this.scene.isMenuOpen) return;
+
     if (!this.canGrenade) return;
 
     this.canGrenade = false;
@@ -126,14 +132,19 @@ export default class SkillSystem {
             });
 
             if (zombie.health <= 0) {
-              const orb = this.scene.xpOrbs.create(
+              const orb = this.scene.xpOrbPool.get(
                 zombie.x,
                 zombie.y,
                 "xp-tex",
               );
-
-              orb.value = zombie.xpValue;
-
+              if (orb) {
+                this.scene.xpOrbPool.activate(
+                  orb,
+                  zombie.x,
+                  zombie.y,
+                  zombie.xpValue,
+                );
+              }
               zombie.destroy();
             }
           }

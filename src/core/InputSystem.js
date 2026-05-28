@@ -27,7 +27,9 @@ export default class InputSystem {
 
     // ================= SHOOT =================
 
-    this.scene.input.on("pointerdown", () => {
+    this.scene.input.on("pointerdown", (pointer, currentlyOver) => {
+      if (this.scene.isMenuOpen) return;
+
       if (this.scene.isDead) return;
 
       for (let i = 0; i < this.scene.multiShot; i++) {

@@ -1,104 +1,87 @@
-import Phaser from "phaser"
+import Phaser from "phaser";
 import GameConfig from "../config/GameConfig.js";
 import ObjectPool from "../pooling/ObjectPool.js";
 
 export default class WeaponSystem {
-
-  constructor(scene){
-
-    this.scene = scene
+  constructor(scene) {
+    this.scene = scene;
 
     // ================= BASE =================
 
     this.fireRate = GameConfig.WEAPON.FIRE_RATE;
 
-    this.bulletSpeed = 600
+    this.bulletSpeed = 600;
 
-    this.bulletDamage = 1
+    this.bulletDamage = 1;
 
-    this.bulletLifetime = 2000
+    this.bulletLifetime = 2000;
 
-    this.canShoot = true
+    this.canShoot = true;
 
     // ================= SHOTGUN =================
 
-    this.shotgunMode = false
+    this.shotgunMode = false;
 
-    this.shotgunPellets = 5
+    this.shotgunPellets = 5;
 
-    this.shotgunSpread = 0.25
-
+    this.shotgunSpread = 0.25;
   }
 
-  shoot(player, angleOffset = 0, scale = 1){
+  shoot(player, angleOffset = 0, scale = 1) {
+    if (this.scene.isMenuOpen) return;
 
-    if(!this.canShoot) return
+    if (!this.canShoot) return;
 
-    this.canShoot = false
+    this.canShoot = false;
 
     // SHOTGUN
-    if(this.shotgunMode){
-
-      this.shootShotgun(
-        player,
-        scale
-      )
+    if (this.shotgunMode) {
+      this.shootShotgun(player, scale);
     }
 
     // NORMAL
-    else{
-
-      this.createBullet(
-        player,
-        angleOffset,
-        scale
-      )
+    else {
+      this.createBullet(player, angleOffset, scale);
     }
 
     // COOLDOWN
-    this.scene.time.delayedCall(
-      this.fireRate,
-      ()=>{
-
-        this.canShoot = true
-
-      }
-    )
-
+    this.scene.time.delayedCall(this.fireRate, () => {
+      this.canShoot = true;
+    });
   }
 
   // ================= NORMAL SHOT =================
 
-  createBullet(player, angleOffset, scale){
-
-    const pointer = this.scene.input.activePointer
+  createBullet(player, angleOffset, scale) {
+    const pointer = this.scene.input.activePointer;
 
     let bullet = this.scene.bullets.get(player.x, player.y, "bullet-tex");
     if (!bullet) return;
 
     ObjectPool.activate(bullet, player.x, player.y);
 
-    if(!bullet) return
+    if (!bullet) return;
 
-    const angle = Phaser.Math.Angle.Between(
-      player.x,
-      player.y,
-      pointer.worldX,
-      pointer.worldY
-    ) + angleOffset
+    const angle =
+      Phaser.Math.Angle.Between(
+        player.x,
+        player.y,
+        pointer.worldX,
+        pointer.worldY,
+      ) + angleOffset;
 
-    bullet.setScale(scale)
+    bullet.setScale(scale);
 
-    bullet.setRotation(angle)
+    bullet.setRotation(angle);
 
-    bullet.damage = this.bulletDamage
+    bullet.damage = this.bulletDamage;
 
-    bullet.body.allowGravity = false
+    bullet.body.allowGravity = false;
 
     bullet.setVelocity(
       Math.cos(angle) * this.bulletSpeed,
-      Math.sin(angle) * this.bulletSpeed
-    )
+      Math.sin(angle) * this.bulletSpeed,
+    );
 
     // MUZZLE FLASH
     const flash = this.scene.add.rectangle(
@@ -106,111 +89,87 @@ export default class WeaponSystem {
       player.y + Math.sin(angle) * 30,
       25,
       10,
-      0xffffaa
-    )
+      0xffffaa,
+    );
 
-    flash.setRotation(angle)
+    flash.setRotation(angle);
 
     this.scene.tweens.add({
-      targets:flash,
-      alpha:0,
-      duration:60,
-      onComplete:()=>{
-        flash.destroy()
-      }
-    })
+      targets: flash,
+      alpha: 0,
+      duration: 60,
+      onComplete: () => {
+        flash.destroy();
+      },
+    });
 
     // AUTO DESTROY
-    this.scene.time.delayedCall(
-      this.bulletLifetime,
-      ()=>{
-
-        if (bullet.active) {
-         ObjectPool.deactivate(bullet);
-        }
+    this.scene.time.delayedCall(this.bulletLifetime, () => {
+      if (bullet.active) {
+        ObjectPool.deactivate(bullet);
       }
-    )
-
+    });
   }
 
   // ================= SHOTGUN =================
 
-  shootShotgun(player, scale){
-
-    const pointer = this.scene.input.activePointer
+  shootShotgun(player, scale) {
+    const pointer = this.scene.input.activePointer;
 
     const baseAngle = Phaser.Math.Angle.Between(
       player.x,
       player.y,
       pointer.worldX,
-      pointer.worldY
-    )
+      pointer.worldY,
+    );
 
-    for(let i=0;i<this.shotgunPellets;i++){
-
-      const spread =
-        Phaser.Math.FloatBetween(
-          -this.shotgunSpread,
-          this.shotgunSpread
-        )
+    for (let i = 0; i < this.shotgunPellets; i++) {
+      const spread = Phaser.Math.FloatBetween(
+        -this.shotgunSpread,
+        this.shotgunSpread,
+      );
 
       const bullet = this.scene.bullets.get(player.x, player.y, "bullet-tex");
 
-      if (!bullet) continue
+      if (!bullet) continue;
       ObjectPool.activate(bullet, player.x, player.y);
 
-      const angle = baseAngle + spread
+      const angle = baseAngle + spread;
 
-      bullet.setScale(scale)
+      bullet.setScale(scale);
 
-      bullet.setRotation(angle)
+      bullet.setRotation(angle);
 
-      bullet.damage = this.bulletDamage
+      bullet.damage = this.bulletDamage;
 
-      bullet.body.allowGravity = false
+      bullet.body.allowGravity = false;
 
       bullet.setVelocity(
         Math.cos(angle) * this.bulletSpeed,
-        Math.sin(angle) * this.bulletSpeed
-      )
+        Math.sin(angle) * this.bulletSpeed,
+      );
 
-      this.scene.time.delayedCall(
-        this.bulletLifetime,
-        ()=>{
-
-          if (bullet.active) {
-            ObjectPool.deactivate(bullet);
-          }
-
+      this.scene.time.delayedCall(this.bulletLifetime, () => {
+        if (bullet.active) {
+          ObjectPool.deactivate(bullet);
         }
-      )
-
+      });
     }
 
     // FLASH
-    const flash = this.scene.add.circle(
-      player.x,
-      player.y,
-      20,
-      0xffddaa
-    )
+    const flash = this.scene.add.circle(player.x, player.y, 20, 0xffddaa);
 
     this.scene.tweens.add({
-      targets:flash,
-      alpha:0,
-      scale:2,
-      duration:100,
-      onComplete:()=>{
-        flash.destroy()
-      }
-    })
+      targets: flash,
+      alpha: 0,
+      scale: 2,
+      duration: 100,
+      onComplete: () => {
+        flash.destroy();
+      },
+    });
 
     // SHAKE
-    this.scene.cameras.main.shake(
-      60,
-      0.003
-    )
-
+    this.scene.cameras.main.shake(60, 0.003);
   }
-
 }
