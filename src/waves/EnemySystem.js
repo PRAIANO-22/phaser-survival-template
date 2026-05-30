@@ -13,10 +13,7 @@ export default class EnemySystem {
   spawnZombie() {
     if (this.scene.isDead) return;
 
-    if (
-      this.scene.enemyPool.group.countActive(true) >=
-      GameConfig.ZOMBIES.MAX_ZOMBIES
-    ) {
+    if (this.scene.enemyPool.countActive() >= GameConfig.ZOMBIES.MAX_ZOMBIES) {
       return;
     }
 
@@ -73,16 +70,9 @@ export default class EnemySystem {
 
     // ELITE
     if (roll <= 8) {
-      zombie = this.scene.enemyPool.group.get(x, y, "elite-zombie-tex");
+      zombie = this.scene.enemyPool.spawn(x, y, "zombie-tex");
+
       if (!zombie) return;
-
-      zombie.setActive(true);
-
-      zombie.setVisible(true);
-
-      zombie.body.enable = true;
-
-      zombie.setPosition(x, y);
 
       zombie.health = GameConfig.ZOMBIES.ELITE_HEALTH;
 
@@ -92,21 +82,16 @@ export default class EnemySystem {
 
       zombie.xpValue = 5;
 
+      zombie.clearTint();
       zombie.setTint(0xaa00ff);
+      zombie.setScale(1);
     }
 
     // FAST
     else if (roll <= 35) {
-      zombie = this.scene.enemyPool.group.get(x, y, "zombie-tex");
+      zombie = this.scene.enemyPool.spawn(x, y, "zombie-tex");
+
       if (!zombie) return;
-
-      zombie.setActive(true);
-
-      zombie.setVisible(true);
-
-      zombie.body.enable = true;
-
-      zombie.setPosition(x, y);
 
       zombie.health = GameConfig.ZOMBIES.FAST_HEALTH;
 
@@ -117,21 +102,14 @@ export default class EnemySystem {
 
       zombie.setScale(0.7);
 
+      zombie.clearTint();
       zombie.setTint(0xffff00);
     }
 
     // TANK
     else if (roll <= 55) {
-      zombie = this.scene.enemyPool.group.get(x, y, "zombie-tex");
+      zombie = this.scene.enemyPool.spawn(x, y, "zombie-tex");
       if (!zombie) return;
-
-      zombie.setActive(true);
-
-      zombie.setVisible(true);
-
-      zombie.body.enable = true;
-
-      zombie.setPosition(x, y);
 
       zombie.health = GameConfig.ZOMBIES.TANK_HEALTH;
 
@@ -143,27 +121,22 @@ export default class EnemySystem {
 
       zombie.setScale(1.6);
 
+      zombie.clearTint();
       zombie.setTint(0x00ffff);
     }
 
     // NORMAL
     else {
-      zombie = this.scene.enemyPool.group.get(x, y, "zombie-tex");
+      zombie = this.scene.enemyPool.spawn(x, y, "zombie-tex");
       if (!zombie) return;
-
-      zombie.setActive(true);
-
-      zombie.setVisible(true);
-
-      zombie.body.enable = true;
-
-      zombie.setPosition(x, y);
 
       zombie.health = GameConfig.ZOMBIES.NORMAL_HEALTH;
 
       zombie.speed = this.scene.waveSystem.zombieSpeed;
 
       zombie.xpValue = 1;
+      zombie.setScale(1);
+      zombie.clearTint();
       console.log("SPAWNANDO");
     }
   }
@@ -179,7 +152,7 @@ export default class EnemySystem {
 
     this.zombieUpdateTimer = 0;
 
-    const zombies = this.scene.enemyPool.group.getChildren();
+    const zombies = this.scene.enemyPool.getChildren();
 
     for (let i = 0; i < zombies.length; i++) {
       const zombie = zombies[i];

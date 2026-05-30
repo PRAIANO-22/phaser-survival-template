@@ -55,4 +55,13 @@ export default class EnemyPool {
   clear() {
     this.group.clear(true);
   }
+  spawn(x, y, texture) {
+    const zombie = this.get(x, y, texture);
+
+    if (!zombie) return null;
+
+    this.activate(zombie, x, y);
+
+    return zombie;
+  }
 }

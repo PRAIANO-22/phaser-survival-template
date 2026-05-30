@@ -13,7 +13,7 @@ export default class UpgradeMenu {
     this.scene.player.setVelocity(0);
 
     // PARA TODOS ZUMBIS
-    const zombies = this.scene.enemyPool.group.getChildren();
+    const zombies = this.scene.enemyPool.getChildren();
 
     for (let i = 0; i < zombies.length; i++) {
       const zombie = zombies[i];
