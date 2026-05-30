@@ -64,3 +64,51 @@ menu continua clicável
 
 ---
 
+EnemyPool Refactor
+
+Antes
+
+EnemySystem acessava:
+- enemyPool.group.get()
+- enemyPool.group.countActive()
+
+Depois
+
+EnemySystem usa:
+- enemyPool.spawn()
+- enemyPool.countActive()
+- enemyPool.getChildren()
+
+Benefícios
+
+- menor acoplamento
+- melhor encapsulamento
+- arquitetura mais reutilizável
+- framework mais escalável
+
+Game Over UI Fix
+
+Problema
+
+Game Over aparecia parcialmente fora da tela
+dependendo da posição da câmera
+
+Causa
+
+Uso de:
+camera.centerX
+camera.centerY
+
+em elementos de HUD.
+
+Solução
+
+Uso de:
+scale.width / 2
+scale.height / 2
+para posicionamento de UI fixa.
+
+Resultado
+
+Game Over sempre centralizado
+independente da posição do jogador
