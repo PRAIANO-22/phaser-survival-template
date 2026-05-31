@@ -33,13 +33,40 @@ const GameConfig = {
     ELITE_CHANCE: 0.08,
     FAST_CHANCE: 0.14,
     TANK_CHANCE: 0.05,
-    NORMAL_HEALTH: 3,
-    ELITE_HEALTH: 8,
-    FAST_HEALTH: 2,
-    TANK_HEALTH: 14,
-    ELITE_SPEED_BONUS: 20,
-    FAST_SPEED_BONUS: 45,
-    TANK_SPEED_PENALTY: 30,
+
+    TYPES: {
+      NORMAL: {
+        health: 3,
+        speedBonus: 0,
+        xp: 1,
+        scale: 1,
+        tint: null,
+      },
+
+      FAST: {
+        health: 2,
+        speedBonus: 45,
+        xp: 2,
+        scale: 0.7,
+        tint: 0xffff00,
+      },
+
+      TANK: {
+        health: 14,
+        speedBonus: -30,
+        xp: 6,
+        scale: 1.6,
+        tint: 0x00ffff,
+      },
+
+      ELITE: {
+        health: 8,
+        speedBonus: 20,
+        xp: 5,
+        scale: 1,
+        tint: 0xaa00ff,
+      },
+    },
   },
   XP: {
     START_LEVEL: 1,

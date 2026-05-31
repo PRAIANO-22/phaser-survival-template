@@ -750,3 +750,32 @@ The project is no longer in an experimental prototype stage.
 It is transitioning into:
 
 **Reusable Technical Product Infrastructure.**
+
+Zombie Types Refactor
+
+The zombie attribute system was migrated from scattered constants to a data-driven configuration model.
+
+Before:
+
+NORMAL_HEALTH
+FAST_HEALTH
+TANK_HEALTH
+ELITE_HEALTH
+
+FAST_SPEED_BONUS
+TANK_SPEED_PENALTY
+ELITE_SPEED_BONUS
+
+After:
+
+GameConfig.ZOMBIES.TYPES
+
+Benefits:
+
+- centralized configuration
+- easier balancing
+- simpler enemy creation
+- reduced code duplication
+- framework-oriented architecture
+
+The EnemySystem now consumes configuration data instead of hardcoded enemy attributes.

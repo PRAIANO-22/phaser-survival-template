@@ -66,78 +66,43 @@ export default class EnemySystem {
 
     const roll = Phaser.Math.Between(1, 100);
 
-    let zombie;
+    let config;
+
+    const zombie = this.scene.enemyPool.spawn(x, y, "zombie-tex");
+
+    if (!zombie) return;
 
     // ELITE
     if (roll <= 8) {
-      zombie = this.scene.enemyPool.spawn(x, y, "zombie-tex");
-
-      if (!zombie) return;
-
-      zombie.health = GameConfig.ZOMBIES.ELITE_HEALTH;
-
-      zombie.speed =
-        this.scene.waveSystem.zombieSpeed +
-        GameConfig.ZOMBIES.ELITE_SPEED_BONUS;
-
-      zombie.xpValue = 5;
-
-      zombie.clearTint();
-      zombie.setTint(0xaa00ff);
-      zombie.setScale(1);
+      config = GameConfig.ZOMBIES.TYPES.ELITE;
     }
 
     // FAST
     else if (roll <= 35) {
-      zombie = this.scene.enemyPool.spawn(x, y, "zombie-tex");
-
-      if (!zombie) return;
-
-      zombie.health = GameConfig.ZOMBIES.FAST_HEALTH;
-
-      zombie.speed =
-        this.scene.waveSystem.zombieSpeed + GameConfig.ZOMBIES.FAST_SPEED_BONUS;
-
-      zombie.xpValue = 2;
-
-      zombie.setScale(0.7);
-
-      zombie.clearTint();
-      zombie.setTint(0xffff00);
+      config = GameConfig.ZOMBIES.TYPES.FAST;
     }
 
     // TANK
     else if (roll <= 55) {
-      zombie = this.scene.enemyPool.spawn(x, y, "zombie-tex");
-      if (!zombie) return;
-
-      zombie.health = GameConfig.ZOMBIES.TANK_HEALTH;
-
-      zombie.speed =
-        this.scene.waveSystem.zombieSpeed -
-        GameConfig.ZOMBIES.TANK_SPEED_PENALTY;
-
-      zombie.xpValue = 6;
-
-      zombie.setScale(1.6);
-
-      zombie.clearTint();
-      zombie.setTint(0x00ffff);
+      config = GameConfig.ZOMBIES.TYPES.TANK;
     }
 
     // NORMAL
     else {
-      zombie = this.scene.enemyPool.spawn(x, y, "zombie-tex");
-      if (!zombie) return;
+      config = GameConfig.ZOMBIES.TYPES.NORMAL;
+    }
+    zombie.health = config.health;
 
-      zombie.health = GameConfig.ZOMBIES.NORMAL_HEALTH;
+    zombie.speed = this.scene.waveSystem.zombieSpeed + config.speedBonus;
 
-      zombie.speed = this.scene.waveSystem.zombieSpeed;
+    zombie.xpValue = config.xp;
 
-      zombie.xpValue = 1;
-      zombie.setScale(1);
-      zombie.clearTint();
-      console.log("SPAWNANDO");
+    zombie.setScale(config.scale);
+
+    zombie.clearTint();
+
+    if (config.tint !== null) {
+      zombie.setTint(config.tint);
     }
   }
 
