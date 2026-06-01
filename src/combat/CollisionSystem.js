@@ -57,13 +57,18 @@ export default class CollisionSystem {
           },
         });
 
-        zombie.setTint(0xff0000);
+        zombie.setTint(0xffffff);
         zombie.setScale(1.1);
 
         this.scene.time.delayedCall(50, () => {
           if (zombie.active) {
-            zombie.clearTint();
-            zombie.setScale(1);
+            if (zombie.baseTint !== null) {
+              zombie.setTint(zombie.baseTint);
+            } else {
+              zombie.clearTint();
+            }
+
+            zombie.setScale(zombie.baseScale);
           }
         });
 

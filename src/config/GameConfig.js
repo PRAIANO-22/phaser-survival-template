@@ -67,6 +67,28 @@ const GameConfig = {
         tint: 0xaa00ff,
       },
     },
+  
+    SPAWN_TABLE: [
+      {
+        chance: 8,
+        type: "ELITE",
+      },
+
+      {
+        chance: 27,
+        type: "FAST",
+      },
+
+      {
+        chance: 20,
+        type: "TANK",
+      },
+
+      {
+        chance: 45,
+        type: "NORMAL",
+      },
+    ],
   },
   XP: {
     START_LEVEL: 1,

@@ -66,31 +66,36 @@ export default class EnemySystem {
 
     const roll = Phaser.Math.Between(1, 100);
 
+    let accumulatedChance = 0;
+
     let config;
 
     const zombie = this.scene.enemyPool.spawn(x, y, "zombie-tex");
 
     if (!zombie) return;
 
-    // ELITE
-    if (roll <= 8) {
-      config = GameConfig.ZOMBIES.TYPES.ELITE;
-    }
+   // SELECT ZOMBIE TYPE
+    for (const entry of GameConfig.ZOMBIES.SPAWN_TABLE) {
+  
+      accumulatedChance += entry.chance;
 
-    // FAST
-    else if (roll <= 35) {
-      config = GameConfig.ZOMBIES.TYPES.FAST;
-    }
 
-    // TANK
-    else if (roll <= 55) {
-      config = GameConfig.ZOMBIES.TYPES.TANK;
-    }
+  if (roll <= accumulatedChance) {
 
-    // NORMAL
-    else {
-      config = GameConfig.ZOMBIES.TYPES.NORMAL;
-    }
+    config =
+      GameConfig.ZOMBIES.TYPES[
+        entry.type
+      ];
+    
+    console.log("TIPO:", entry.type);
+
+    break;
+  }
+}
+if (!config) {
+  return;
+}
+    
     zombie.health = config.health;
 
     zombie.speed = this.scene.waveSystem.zombieSpeed + config.speedBonus;
@@ -98,6 +103,11 @@ export default class EnemySystem {
     zombie.xpValue = config.xp;
 
     zombie.setScale(config.scale);
+
+    zombie.baseScale = config.scale;
+    zombie.baseTint = config.tint;
+
+    console.log(config);
 
     zombie.clearTint();
 

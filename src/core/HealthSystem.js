@@ -26,7 +26,7 @@ export default class HealthSystem {
 
     this.canTakeDamage = false;
 
-    this.scene.player.setTint(0xff0000);
+    this.scene.player.setTint(0xffffff);
 
     this.scene.cameras.main.shake(80, 0.003);
 

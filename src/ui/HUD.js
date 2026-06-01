@@ -101,7 +101,7 @@ export default class HUD {
     } else if (percentage > 0.3) {
       this.healthBar.fillColor = 0xffff00;
     } else {
-      this.healthBar.fillColor = 0xff0000;
+      this.healthBar.fillColor = 0xffffff;
     }
   }
 }

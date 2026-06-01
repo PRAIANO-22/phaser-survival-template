@@ -42,7 +42,7 @@ export default class GameScene extends Phaser.Scene {
     b.destroy();
     // ZOMBIE
     const z = this.make.graphics({ add: false });
-    z.fillStyle(0xff0000, 1);
+    z.fillStyle(0xffffff, 1);
     z.fillRect(0, 0, 40, 40);
     z.generateTexture("zombie-tex", 40, 40);
     z.destroy();
