@@ -779,3 +779,182 @@ Benefits:
 - framework-oriented architecture
 
 The EnemySystem now consumes configuration data instead of hardcoded enemy attributes.
+
+Enemy Architecture Refactor
+EnemyPool Encapsulation
+Antes
+
+EnemySystem acessava diretamente:
+
+enemyPool.group.get()
+enemyPool.group.countActive()
+enemyPool.group.getChildren()
+
+Depois
+
+EnemyPool passou a fornecer sua própria interface:
+
+enemyPool.spawn()
+enemyPool.countActive()
+enemyPool.getChildren()
+
+Benefícios
+menor acoplamento
+melhor encapsulamento
+manutenção simplificada
+base preparada para novos tipos de inimigos
+Data Driven Zombie Types
+Problema
+
+Os atributos dos inimigos estavam espalhados pelo código:
+
+NORMAL_HEALTH
+FAST_HEALTH
+TANK_HEALTH
+ELITE_HEALTH
+
+FAST_SPEED_BONUS
+TANK_SPEED_PENALTY
+ELITE_SPEED_BONUS
+
+Cada novo inimigo exigia alterações em múltiplos locais.
+
+Solução
+
+Criação de:
+
+GameConfig.ZOMBIES.TYPES
+
+Exemplo:
+FAST: {
+  health: 2,
+  speedBonus: 45,
+  xp: 2,
+  scale: 0.7,
+  tint: 0xffff00,
+}
+
+EnemySystem passou a consumir configurações em vez de valores hardcoded
+
+Benefícios
+configuração centralizada
+balanceamento simplificado
+menos duplicação de código
+criação de novos inimigos sem alterar lógica principal
+
+Data Driven Spawn Table
+Problema
+
+A seleção dos tipos de inimigos utilizava lógica fixa:
+
+if (roll <= 8)
+else if (roll <= 35)
+else if (roll <= 55)
+else
+
+EnemySystem conhecia diretamente todos os tipos de inimigos.
+
+Solução
+
+Criação de:
+
+GameConfig.ZOMBIES.SPAWN_TABLE
+
+SPAWN_TABLE: [
+  { chance: 8, type: "ELITE" },
+  { chance: 27, type: "FAST" },
+  { chance: 20, type: "TANK" },
+  { chance: 45, type: "NORMAL" },
+]
+
+Seleção realizada através de loop acumulativo:
+
+for (const entry of SPAWN_TABLE)
+
+Benefícios
+EnemySystem desacoplado dos tipos específicos
+novos inimigos adicionados apenas via configuração
+sistema totalmente orientado por dados
+escalabilidade muito maior
+Zombie Visual State Restoration
+Problema
+
+Após a implementação de sprites base brancos, os inimigos perdiam:
+
+cor original
+escala original
+
+ao receber dano.
+
+O efeito de hit restaurava:
+
+clearTint()
+setScale(1)
+
+causando perda da identidade visual dos tipos especiais.
+
+Solução
+
+Armazenamento do estado visual base:
+
+zombie.baseTint
+zombie.baseScale
+
+Durante o hit:
+
+setTint(0xffffff)
+setScale(...)
+
+Após o efeito:
+
+setTint(baseTint)
+setScale(baseScale)
+
+Resultado
+FAST continua amarelo
+TANK continua ciano
+ELITE continua roxo
+NORMAL continua branco
+
+Mesmo após múltiplos hits.
+
+Zombie Texture Fix
+Problema
+
+A textura base dos zumbis era gerada em vermelho:
+
+fillStyle(0xff0000)
+
+O sistema de tint utilizava multiplicação de cores, impedindo a exibição correta das variantes.
+
+Solução
+
+Alteração da textura base para:
+
+fillStyle(0xffffff)
+Resultado
+NORMAL = branco
+FAST = amarelo
+TANK = ciano
+ELITE = roxo
+
+Cores exibidas corretamente.
+
+Estado Atual da Arquitetura
+✓ Upgrade Menu Pause Fix
+✓ EnemyPool Encapsulation
+✓ Data Driven Zombie Types
+✓ Data Driven Spawn Table
+✓ Visual State Restoration
+✓ Zombie Texture Fix
+✓ Game Over UI Fix
+✓ Pool Friendly Systems
+✓ Framework-Oriented Architecture
+Próxima Etapa
+Boss Framework
+
+- BossConfig
+- BossSystem
+- BossSpawner
+- Boss Scaling
+- Boss Rewards
