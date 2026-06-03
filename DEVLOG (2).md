@@ -958,3 +958,486 @@ Boss Framework
 - BossSpawner
 - Boss Scaling
 - Boss Rewards
+# RELATÓRIO DE PROGRESSO — ZOMBIE SURVIVOR (PHASER)
+
+## ESTADO ATUAL DO PROJETO
+
+O projeto evoluiu de um protótipo técnico para um Survivor jogável com progressão, sistema de upgrades, múltiplos inimigos e sistema de boss funcional.
+
+---
+
+# FUNCIONALIDADES IMPLEMENTADAS
+
+## Player
+
+✅ Movimento
+
+✅ Dash
+
+✅ Sistema de vida
+
+✅ Game Over
+
+✅ Restart
+
+---
+
+## Combate
+
+### WeaponSystem
+
+✅ Disparo automático
+
+✅ Attack Speed
+
+✅ Multi Shot
+
+✅ Bullet Scaling
+
+✅ Dano funcional
+
+---
+
+## SkillSystem
+
+✅ Dash
+
+✅ Granada
+
+✅ Cooldowns
+
+---
+
+## DroneSystem
+
+✅ Drone orbital
+
+✅ Auto target
+
+✅ Auto shoot
+
+---
+
+## Progressão
+
+### XPSystem
+
+✅ Coleta de XP
+
+✅ Level Up
+
+✅ Progressão funcional
+
+---
+
+### UpgradeMenu
+
+✅ Escolha de upgrades
+
+✅ Menu centralizado
+
+✅ Aplicação de upgrades
+
+✅ Fechamento automático
+
+✅ Gameplay pausa durante seleção
+
+---
+
+## HUD
+
+✅ Barra de vida
+
+✅ XP
+
+✅ Nível
+
+✅ Wave
+
+---
+
+# SISTEMA DE INIMIGOS
+
+## EnemySystem
+
+Responsável por:
+
+```text
+Spawn de zombies
+Movimentação
+IA básica
+Tipos de zombies
+Controle de velocidade
+```
+
+Tipos atuais:
+
+```text
+Normal
+Fast
+Tank
+Elite
+```
+
+---
+
+## Boss System
+
+### BossPool
+
+Responsável por:
+
+```text
+Spawn
+Ativação
+Desativação
+Reutilização
+```
+
+### BossSpawner
+
+Responsável por:
+
+```text
+Criação do Tank Boss
+Configuração inicial
+Spawn fora da tela
+```
+
+### BossSystem
+
+Responsável por:
+
+```text
+Movimentação
+Perseguição do jogador
+Rotação
+Pause do Boss
+```
+
+Funcionalidades validadas:
+
+✅ Spawn
+
+✅ Movimento
+
+✅ Perseguição
+
+✅ Recebe dano
+
+✅ Causa dano
+
+✅ Morre corretamente
+
+✅ Dropa XP
+
+✅ Pausa durante Upgrade Menu
+
+---
+
+# COLLISION SYSTEM
+
+## Implementações Ativas
+
+### Bullet x Zombie
+
+✅ Dano
+
+✅ Flash visual
+
+✅ Texto de dano
+
+✅ Morte
+
+✅ XP Drop
+
+---
+
+### Bullet x Boss
+
+✅ Dano
+
+✅ Redução de HP
+
+✅ Morte
+
+✅ XP Drop
+
+---
+
+### Player x Zombie
+
+✅ Dano ao jogador
+
+---
+
+### Player x Boss
+
+✅ Dano ao jogador
+
+---
+
+### Player x XP Orb
+
+✅ Coleta de XP
+
+---
+
+# WAVE SYSTEM
+
+## Estado Atual
+
+WaveSystem funcional.
+
+Atualmente controla:
+
+```text
+Progressão de waves
+Velocidade dos zombies
+Taxa de spawn
+Eventos temporizados
+```
+
+Fluxo atual:
+
+```text
+Nova Wave
+↓
+Mais velocidade
+↓
+Menor intervalo de spawn
+↓
+Maior dificuldade
+```
+
+---
+
+## Boss Waves
+
+Implementado:
+
+```text
+Wave 5
+↓
+Spawn do Tank Boss
+```
+
+Boss não nasce mais diretamente no GameScene.
+
+Spawn agora controlado pelo WaveSystem.
+
+---
+
+# ARQUITETURA ATUAL
+
+## Systems
+
+```text
+WeaponSystem
+SkillSystem
+DroneSystem
+EnemySystem
+BossSystem
+WaveSystem
+CollisionSystem
+XPSystem
+HealthSystem
+PlayerSystem
+InputSystem
+TweenManager
+```
+
+---
+
+## Pools
+
+```text
+EnemyPool
+BossPool
+XPOrbPool
+```
+
+---
+
+## UI
+
+```text
+HUD
+UpgradeMenu
+```
+
+---
+
+# MELHORIA ARQUITETURAL RECENTE
+
+Antes:
+
+```text
+UpgradeMenu
+ ├─ EnemyPool
+ └─ BossPool
+```
+
+Agora:
+
+```text
+UpgradeMenu
+ ├─ EnemySystem.pause()
+ └─ BossSystem.pause()
+```
+
+Métodos adicionados:
+
+```js
+enemySystem.pause()
+
+bossSystem.pause()
+```
+
+Benefícios:
+
+✅ Menor acoplamento
+
+✅ Melhor separação de responsabilidades
+
+✅ Código mais escalável
+
+✅ UpgradeMenu desacoplado dos Pools
+
+---
+
+# PROBLEMAS RESOLVIDOS
+
+## Boss não causava dano
+
+Causa:
+
+```text
+Player x Boss overlap desativado
+```
+
+Status:
+
+✅ Resolvido
+
+---
+
+## Boss não recebia dano
+
+Causa:
+
+```text
+Bullet x Boss overlap inexistente
+```
+
+Status:
+
+✅ Resolvido
+
+---
+
+## Boss não morria
+
+Causa:
+
+```text
+Nenhuma lógica de morte ligada ao BossPool
+```
+
+Status:
+
+✅ Resolvido
+
+---
+
+## Boss não pausava durante Upgrade
+
+Causa:
+
+```text
+Velocity do boss permanecia ativa
+```
+
+Status:
+
+✅ Resolvido
+
+---
+
+# ESTADO GERAL DO PROJETO
+
+| Sistema           | Status |
+| ----------------- | ------ |
+| Player            | 95%    |
+| WeaponSystem      | 95%    |
+| SkillSystem       | 90%    |
+| DroneSystem       | 90%    |
+| EnemySystem       | 90%    |
+| BossSystem        | 90%    |
+| CollisionSystem   | 95%    |
+| UpgradeMenu       | 95%    |
+| HUD               | 95%    |
+| WaveSystem        | 75%    |
+| Arquitetura Geral | 90%    |
+
+---
+
+# PRÓXIMAS PRIORIDADES
+
+## WaveSystem 2.0
+
+Planejado:
+
+```text
+Wave 10 → Boss mais forte
+Wave 15 → Boss + Elite
+Wave Rewards
+Conclusão de Wave
+Escalonamento avançado
+```
+
+---
+
+## Novas Armas
+
+Possíveis implementações:
+
+```text
+Shotgun
+Laser
+Piercing Bullet
+Boomerang
+```
+
+---
+
+## Boss Avançado
+
+Possíveis implementações:
+
+```text
+Dash
+Ataque em área
+Invocação de minions
+Fases de combate
+```
+
+---
+
+# CHECKPOINT
+
+Último commit estável:
+
+```text
+db74eca
+```
+
+Status:
+
+```text
+Projeto estável
+Boss funcional
+Upgrade Menu estável
+Arquitetura modular consolidada
+Pronto para expansão de gameplay
+```
