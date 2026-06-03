@@ -74,28 +74,22 @@ export default class EnemySystem {
 
     if (!zombie) return;
 
-   // SELECT ZOMBIE TYPE
+    // SELECT ZOMBIE TYPE
     for (const entry of GameConfig.ZOMBIES.SPAWN_TABLE) {
-  
       accumulatedChance += entry.chance;
 
+      if (roll <= accumulatedChance) {
+        config = GameConfig.ZOMBIES.TYPES[entry.type];
 
-  if (roll <= accumulatedChance) {
+        console.log("TIPO:", entry.type);
 
-    config =
-      GameConfig.ZOMBIES.TYPES[
-        entry.type
-      ];
-    
-    console.log("TIPO:", entry.type);
+        break;
+      }
+    }
+    if (!config) {
+      return;
+    }
 
-    break;
-  }
-}
-if (!config) {
-  return;
-}
-    
     zombie.health = config.health;
 
     zombie.speed = this.scene.waveSystem.zombieSpeed + config.speedBonus;
@@ -157,6 +151,15 @@ if (!config) {
       zombie.setVelocity(vx, vy);
 
       zombie.rotation = Math.atan2(dy, dx);
+    }
+  }
+  pause() {
+    const zombies = this.scene.enemyPool.getChildren();
+
+    for (const zombie of zombies) {
+      if (!zombie.active) continue;
+
+      zombie.setVelocity(0, 0);
     }
   }
 }

@@ -22,6 +22,9 @@ import HUD from "../ui/HUD.js";
 import GameConfig from "../config/GameConfig.js";
 import EnemyPool from "../pooling/EnemyPool.js";
 import XPOrbPool from "../pooling/XPOrbPool.js";
+import BossPool from "../pooling/BossPool.js";
+import BossSpawner from "../core/BossSpawner.js";
+import BossSystem from "../core/BossSystem.js";
 
 export default class GameScene extends Phaser.Scene {
   constructor() {
@@ -58,6 +61,16 @@ export default class GameScene extends Phaser.Scene {
     xp.fillCircle(8, 8, 8);
     xp.generateTexture("xp-tex", 16, 16);
     xp.destroy();
+    // BOSS
+    const bossGraphic = this.make.graphics({ add: false });
+
+    bossGraphic.fillStyle(0xff00ff, 1);
+
+    bossGraphic.fillRect(0, 0, 80, 80);
+
+    bossGraphic.generateTexture("boss-tex", 80, 80);
+
+    bossGraphic.destroy();
   }
   create() {
     // ================= PLAYER =================
@@ -75,6 +88,9 @@ export default class GameScene extends Phaser.Scene {
     // ================= SYSTEMS =================
 
     this.enemyPool = new EnemyPool(this);
+    this.bossPool = new BossPool(this);
+    this.bossSpawner = new BossSpawner(this);
+    this.bossSystem = new BossSystem(this);
     this.enemySystem = new EnemySystem(this);
     this.droneSystem = new DroneSystem(this);
     this.skillSystem = new SkillSystem(this);
@@ -137,7 +153,13 @@ export default class GameScene extends Phaser.Scene {
 
     this.droneSystem.update(delta);
 
-    this.enemySystem.update(delta);
+    if (!this.upgradeContainer) {
+      this.enemySystem.update(delta);
+    }
+    this.bossSystem.update(delta);
+    if (this.isDead) {
+      console.log("PLAYER DEAD");
+    }
   }
 
   // Limpar tweens quando cena termina

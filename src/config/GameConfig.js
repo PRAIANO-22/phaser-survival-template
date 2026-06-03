@@ -90,6 +90,18 @@ const GameConfig = {
       },
     ],
   },
+ 
+    BOSSES: {
+  TANK_BOSS: {
+    health: 500,
+    speed: 60,
+    damage: 20,
+    xp: 100,
+    scale: 1,
+    tint: 0xff00ff,
+  },
+},
+
   XP: {
     START_LEVEL: 1,
     START_XP: 0,

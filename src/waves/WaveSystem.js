@@ -20,6 +20,13 @@ export default class WaveSystem {
     this.wave++;
 
     this.scene.hud.updateUI();
+    
+    if (this.wave === 5) {
+      console.log("SPAWN BOSS");
+
+      this.scene.bossSpawner.spawnTankBoss();
+    }
+
 
     this.zombieSpeed += GameConfig.WAVES.SPEED_INCREASE;
 

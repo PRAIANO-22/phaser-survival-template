@@ -109,6 +109,36 @@ export default class CollisionSystem {
       },
     );
 
+    // ================= BULLET x BOSS =================
+
+    this.scene.physics.add.overlap(
+      this.scene.bullets,
+      this.scene.bossPool.group,
+      (bullet, boss) => {
+        if (!bullet.active || !boss.active) {
+          return;
+        }
+
+        bullet.setActive(false);
+        bullet.setVisible(false);
+        bullet.body.enable = false;
+
+        boss.health -= bullet.damage;
+
+        console.log("BOSS HP:", boss.health);
+
+        if (boss.health <= 0) {
+          const orb = this.scene.xpOrbPool.get(boss.x, boss.y, "xp-tex");
+
+          if (orb) {
+            this.scene.xpOrbPool.activate(orb, boss.x, boss.y, boss.xpValue);
+          }
+
+          this.scene.bossPool.deactivate(boss);
+        }
+      },
+    );
+
     // ================= PLAYER x XP =================
 
     this.scene.physics.add.overlap(
@@ -129,6 +159,16 @@ export default class CollisionSystem {
         if (this.scene.isDead) return;
 
         this.scene.healthSystem.takeDamage(10);
+      },
+    );
+
+    // ================= PLAYER x BOSS =================
+
+    this.scene.physics.add.overlap(
+      this.scene.player,
+      this.scene.bossPool.group,
+      (player, boss) => {
+        this.scene.healthSystem.takeDamage(boss.damage);
       },
     );
   }
