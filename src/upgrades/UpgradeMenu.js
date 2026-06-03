@@ -12,26 +12,8 @@ export default class UpgradeMenu {
     // PARA PLAYER
     this.scene.player.setVelocity(0);
 
-    // PARA TODOS ZUMBIS
-    const zombies = this.scene.enemyPool.getChildren();
-
-    for (let i = 0; i < zombies.length; i++) {
-      const zombie = zombies[i];
-
-      if (!zombie.active) continue;
-
-      zombie.setVelocity(0);
-    }
-    // PARA TODOS BOSSES
-    const bosses = this.scene.bossPool.getChildren();
-
-    for (let i = 0; i < bosses.length; i++) {
-      const boss = bosses[i];
-
-      if (!boss.active) continue;
-
-      boss.setVelocity(0, 0);
-    }
+    this.scene.enemySystem.pause();
+    this.scene.bossSystem.pause();
 
     // PAUSA SPAWN
     if (this.scene.spawnEvent) {
