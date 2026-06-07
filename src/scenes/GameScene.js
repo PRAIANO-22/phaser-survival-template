@@ -157,8 +157,7 @@ export default class GameScene extends Phaser.Scene {
       this.enemySystem.update(delta);
     }
     this.bossSystem.update(delta);
-    if (this.isDead) {
-    }
+   
   }
 
   // Limpar tweens quando cena termina

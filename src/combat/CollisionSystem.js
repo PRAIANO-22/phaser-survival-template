@@ -125,13 +125,14 @@ export default class CollisionSystem {
 
         boss.health -= bullet.damage;
 
-
         if (boss.health <= 0) {
           const orb = this.scene.xpOrbPool.get(boss.x, boss.y, "xp-tex");
 
           if (orb) {
             this.scene.xpOrbPool.activate(orb, boss.x, boss.y, boss.xpValue);
           }
+
+          this.scene.waveSystem.bossFightActive = false;
 
           this.scene.bossPool.deactivate(boss);
         }

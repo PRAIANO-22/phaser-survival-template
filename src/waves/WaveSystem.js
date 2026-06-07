@@ -9,6 +9,8 @@ export default class WaveSystem {
     this.zombieSpeed = GameConfig.WAVES.START_ZOMBIE_SPEED;
 
     this.spawnRate = GameConfig.WAVES.START_SPAWN_RATE;
+
+    this.bossFightActive = false;
   }
 
   // ================= NEXT WAVE =================
@@ -16,11 +18,15 @@ export default class WaveSystem {
   nextWave() {
     if (this.scene.isDead) return;
 
+    if (this.bossFightActive) return;
+
     this.wave++;
 
     this.scene.hud.updateUI();
 
     if (this.wave === 5) {
+      this.bossFightActive = true;
+
       this.scene.bossSpawner.spawnTankBoss();
     }
 

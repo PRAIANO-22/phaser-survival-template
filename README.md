@@ -1,6 +1,10 @@
 # Phaser Survival Framework
 
-A modular Phaser 3 framework for building Vampire Survivors-style games.
+A modular Phaser 3 framework designed for building Vampire Survivors-style games, arena shooters and survival experiences.
+
+The framework provides a complete gameplay foundation, including combat, progression, enemies, bosses, waves and object pooling systems.
+
+Ideal for developers who want to accelerate development and focus on creating content instead of rebuilding core gameplay systems from scratch.
 
 ## Features
 
@@ -18,6 +22,8 @@ A modular Phaser 3 framework for building Vampire Survivors-style games.
 
 ✔ Boss System
 
+✔ Boss Wave Lock System
+
 ✔ Object Pooling
 
 ✔ Drone Companion
@@ -26,7 +32,6 @@ A modular Phaser 3 framework for building Vampire Survivors-style games.
 
 ✔ Game Over & Restart
 
----
 
 ## Built With
 

@@ -144,3 +144,22 @@ Player tracking
 Rotation
 Pause support
 ```
+## Boss Progression
+
+Bosses can pause wave progression.
+
+Example:
+
+Wave 5
+↓
+Boss Spawn
+↓
+Wave Progression Locked
+↓
+Boss Defeated
+↓
+Wave Progression Resumes
+
+This behavior is controlled by:
+
+bossFightActive
