@@ -75,7 +75,7 @@ export default class GameScene extends Phaser.Scene {
   }
   create() {
     // ================= PLAYER =================
-    this.isMenuOpen = false;
+    
     this.playerSpeed = GameConfig.PLAYER.SPEED;
     this.multiShot = GameConfig.WEAPON.MULTI_SHOT;
     this.bulletScale = GameConfig.WEAPON.BULLET_SCALE;
