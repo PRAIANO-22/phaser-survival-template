@@ -1,4 +1,3 @@
-
 import Phaser from "phaser";
 import GameConfig from "../config/GameConfig.js";
 export default class WaveSystem {
@@ -20,13 +19,10 @@ export default class WaveSystem {
     this.wave++;
 
     this.scene.hud.updateUI();
-    
-    if (this.wave === 5) {
-      console.log("SPAWN BOSS");
 
+    if (this.wave === 5) {
       this.scene.bossSpawner.spawnTankBoss();
     }
-
 
     this.zombieSpeed += GameConfig.WAVES.SPEED_INCREASE;
 

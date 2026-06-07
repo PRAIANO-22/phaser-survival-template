@@ -101,12 +101,7 @@ export default class UpgradeMenu {
 
       // CLICK
       btnBg.on("pointerdown", () => {
-        console.log("BOTAO CLICADO");
-        console.log(upgrade.name);
-
         upgrade.effect();
-
-        console.log("EFEITO EXECUTADO");
 
         this.close();
       });

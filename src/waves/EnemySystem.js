@@ -81,8 +81,6 @@ export default class EnemySystem {
       if (roll <= accumulatedChance) {
         config = GameConfig.ZOMBIES.TYPES[entry.type];
 
-        console.log("TIPO:", entry.type);
-
         break;
       }
     }
@@ -100,8 +98,6 @@ export default class EnemySystem {
 
     zombie.baseScale = config.scale;
     zombie.baseTint = config.tint;
-
-    console.log(config);
 
     zombie.clearTint();
 

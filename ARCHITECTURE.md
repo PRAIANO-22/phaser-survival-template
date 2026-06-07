@@ -93,3 +93,118 @@ UpgradeMenu
 ↓
 
 Player Progression
+
+## Scene Initialization Flow
+
+GameScene
+
+↓
+
+EnemyPool
+
+BossPool
+
+XPOrbPool
+
+↓
+
+EnemySystem
+
+BossSystem
+
+WeaponSystem
+
+WaveSystem
+
+XPSystem
+
+HealthSystem
+
+↓
+
+HUD
+
+UpgradeMenu
+
+---
+
+## Update Flow
+
+GameScene.update()
+
+↓
+
+InputSystem
+
+↓
+
+PlayerSystem
+
+↓
+
+EnemySystem
+
+↓
+
+BossSystem
+
+↓
+
+DroneSystem
+
+↓
+
+WeaponSystem
+
+---
+
+## Upgrade Flow
+
+Enemy Death
+
+↓
+
+XP Orb Spawn
+
+↓
+
+XP Collection
+
+↓
+
+XPSystem
+
+↓
+
+Level Up
+
+↓
+
+UpgradeMenu
+
+↓
+
+Player Upgrade
+
+---
+
+## Boss Flow
+
+WaveSystem
+
+↓
+
+BossSpawner
+
+↓
+
+BossPool
+
+↓
+
+BossSystem
+
+↓
+
+CollisionSystem
+

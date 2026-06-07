@@ -48,3 +48,67 @@ Upgrade effects can modify:
 * Skill stats
 * Drone behavior
 * Future systems
+
+## Upgrade Location
+
+Open:
+
+src/upgrades/XPSystem.js
+
+Upgrades are currently defined inside:
+
+levelUp()
+
+---
+
+## Existing Upgrades
+
+* ATTACK SPEED
+* MOVE SPEED
+* MULTI SHOT
+* BULLET SIZE
+* MAX HEALTH
+* SHOTGUN BUILD
+* AUTO DRONE
+
+---
+
+## Example Upgrade
+
+```js
+{
+  name: "MOVE SPEED",
+  effect: () => {
+    this.scene.playerSpeed += 40;
+  }
+}
+```
+
+---
+
+## Upgrade Structure
+
+Each upgrade contains:
+
+```js
+{
+  name: "Upgrade Name",
+  effect: () => {
+    // Upgrade logic
+  }
+}
+```
+
+---
+
+## Notes
+
+New upgrades can modify:
+
+* Player attributes
+* Weapon attributes
+* Health values
+* Drone behavior
+
+The UpgradeMenu automatically displays any upgrades provided by XPSystem.
+

@@ -61,6 +61,7 @@ export default class GameScene extends Phaser.Scene {
     xp.fillCircle(8, 8, 8);
     xp.generateTexture("xp-tex", 16, 16);
     xp.destroy();
+
     // BOSS
     const bossGraphic = this.make.graphics({ add: false });
 
@@ -129,7 +130,6 @@ export default class GameScene extends Phaser.Scene {
     this.hud.updateHealthBar();
     // ================= CAMERA =================
     this.cameras.main.startFollow(this.player);
-    console.log("GAME SCENE RODANDO");
   }
   // ================= UPDATE =================
   update(time, delta) {
@@ -158,7 +158,6 @@ export default class GameScene extends Phaser.Scene {
     }
     this.bossSystem.update(delta);
     if (this.isDead) {
-      console.log("PLAYER DEAD");
     }
   }
 

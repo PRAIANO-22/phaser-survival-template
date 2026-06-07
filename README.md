@@ -118,3 +118,68 @@ Planned:
 * New Weapons
 * Wave Rewards
 * Advanced Difficulty Scaling
+
+## Architecture Highlights
+
+✔ Modular Systems
+
+✔ Object Pooling
+
+✔ Data Driven Enemy Configuration
+
+✔ Upgrade Framework
+
+✔ Boss Framework
+
+✔ Wave Framework
+
+✔ Reusable Components
+
+---
+
+## Screenshots
+
+### Gameplay
+
+![Gameplay](docs/images/gameplay.png)
+
+### Boss Fight
+
+![Boss Fight](docs/images/boss-fight.png)
+
+### Upgrade Menu
+
+![Upgrade Menu](docs/images/upgrade-menu.png)
+
+
+## Development Videos
+
+### YouTube
+
+Boss System Implementation
+https://youtu.be/tvsOiZuw7N0?si=U2JGTuNDPDtGsg91
+
+### TikTok
+
+Development Updates
+https://www.tiktok.com/@claudiocjgdbm/video/7644957351887441172
+## Documentation
+
+* Architecture Overview
+* How To Add Enemies
+* How To Add Bosses
+* How To Add Upgrades
+* Changelog
+* Roadmap
+
+---
+
+## License
+
+Commercial use is allowed.
+
+Games created with this framework may be sold commercially.
+
+See LICENSE.md for full license details.
+
+

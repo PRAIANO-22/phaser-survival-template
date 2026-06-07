@@ -83,3 +83,64 @@ if (this.wave === 10) {
 ## Current Bosses
 
 * Tank Boss
+
+## Current Boss Architecture
+
+- BossPool
+- BossSpawner
+- BossSystem
+- CollisionSystem
+- WaveSystem
+
+## Current Boss
+
+Tank Boss
+
+## Boss Spawn Flow
+
+WaveSystem
+    ↓
+BossSpawner
+    ↓
+BossPool
+    ↓
+BossSystem
+
+## Current Boss Configuration
+
+```js
+{
+  health,
+  speed,
+  damage,
+  xp,
+  scale,
+  tint
+}
+```
+## Notes
+
+Bosses are spawned by WaveSystem.
+
+Boss behavior is handled by BossSystem.
+
+Boss pooling is handled by BossPool.
+
+Boss creation is handled by BossSpawner.
+
+## Current Implementation
+
+Current BossSpawner methods:
+
+```js
+spawnTankBoss()
+```
+
+Current BossSystem responsibilities:
+
+```text
+Movement
+Player tracking
+Rotation
+Pause support
+```

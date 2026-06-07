@@ -1,60 +1,50 @@
-# How To Add A New Enemy
+## Existing Enemy Types
 
-## Step 1
+NORMAL
+FAST
+TANK
+ELITE
+
+## Example Enemy Configuration
+
+```js
+FAST: {
+  health: 2,
+  speedBonus: 45,
+  xp: 2,
+  scale: 0.7,
+  tint: 0xffff00
+}
+```
+## Spawn Table Example
+
+```js
+SPAWN_TABLE: [
+  { chance: 8, type: "ELITE" },
+  { chance: 27, type: "FAST" },
+  { chance: 20, type: "TANK" },
+  { chance: 45, type: "NORMAL" }
+]
+```
+
+## Notes
+
+EnemySystem is fully data-driven.
+
+Adding new enemy types does not require modifications to EnemySystem.js.
+
+Only GameConfig.js needs to be updated.
+
+## Configuration Location
 
 Open:
 
-```text
 src/config/GameConfig.js
-```
 
----
+Enemy types are configured inside:
 
-## Step 2
-
-Add a new enemy inside:
-
-```js
 GameConfig.ZOMBIES.TYPES
-```
 
-Example:
+Spawn chances are configured inside:
 
-```js
-FLYING: {
-  health: 5,
-  speedBonus: 60,
-  xp: 10,
-  scale: 1.2,
-  tint: 0xff8800
-}
-```
-
----
-
-## Step 3
-
-Add the enemy to:
-
-```js
 GameConfig.ZOMBIES.SPAWN_TABLE
-```
-
-Example:
-
-```js
-{
-  chance: 10,
-  type: "FLYING"
-}
-```
-
----
-
-## Step 4
-
-Run the game.
-
-EnemySystem will automatically use the new enemy type.
-
-No EnemySystem modifications are required.

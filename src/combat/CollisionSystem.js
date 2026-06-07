@@ -125,7 +125,6 @@ export default class CollisionSystem {
 
         boss.health -= bullet.damage;
 
-        console.log("BOSS HP:", boss.health);
 
         if (boss.health <= 0) {
           const orb = this.scene.xpOrbPool.get(boss.x, boss.y, "xp-tex");
