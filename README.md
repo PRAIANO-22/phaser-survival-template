@@ -1,5 +1,17 @@
 # Phaser Survival Framework
 
+# Phaser Survival Framework
+
+A modular Phaser 3 framework for building Vampire Survivors-style games.
+
+## Download
+
+Available on Itch.io:
+
+https://nanoboltis.itch.io/phaser-survival-framework
+
+---
+
 A modular Phaser 3 framework designed for building Vampire Survivors-style games, arena shooters and survival experiences.
 
 The framework provides a complete gameplay foundation, including combat, progression, enemies, bosses, waves and object pooling systems.
@@ -185,6 +197,5 @@ Commercial use is allowed.
 
 Games created with this framework may be sold commercially.
 
-See LICENSE.md for full license details.
-
+See LICENSE.md for
 
